@@ -40,6 +40,11 @@ type SectionGroup = {
   metrics: MetricCardRow[];
 };
 
+function resolveApiPath(path: string) {
+  const basePath = '/overview';
+  return path.startsWith(basePath) ? path : `${basePath}${path}`;
+}
+
 function normalizeTrend(direction: string | null | undefined): Trend {
   const value = (direction ?? '').toLowerCase();
   if (value.includes('up') || value.includes('positive')) return 'up';
@@ -82,7 +87,7 @@ export function AgriculturePage() {
       setError(null);
 
       try {
-        const response = await fetch('/api/metric-cards?pillar=Agriculture', { cache: 'no-store' });
+        const response = await fetch(`${resolveApiPath('/api/metric-cards')}?pillar=Agriculture`, { cache: 'no-store' });
         const data = (await response.json()) as MetricCardsResponse;
 
         if (!response.ok) {

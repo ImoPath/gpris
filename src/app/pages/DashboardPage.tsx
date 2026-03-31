@@ -104,10 +104,8 @@ const pillarCards: PillarCard[] = [
 ];
 
 function resolveApiPath(path: string) {
-  if (typeof window !== 'undefined' && window.location.pathname.startsWith('/overview')) {
-    return `/overview${path}`;
-  }
-  return path;
+  const basePath = '/overview';
+  return path.startsWith(basePath) ? path : `${basePath}${path}`;
 }
 
 function normalizeNumber(value: unknown): number | null {

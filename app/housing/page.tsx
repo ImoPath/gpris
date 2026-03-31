@@ -92,6 +92,11 @@ function statusStyles(status: string | null) {
   return 'bg-amber-500/15 text-amber-300 border-amber-500/30';
 }
 
+function resolveApiPath(path: string) {
+  const basePath = '/overview';
+  return path.startsWith(basePath) ? path : `${basePath}${path}`;
+}
+
 export default function HousingPage() {
   const [hoveredCounty, setHoveredCounty] = useState<string | null>(null);
   const [selectedCounty, setSelectedCounty] = useState<string | null>(null);
@@ -107,7 +112,7 @@ export default function HousingPage() {
     const run = async () => {
       setLoadingProjects(true);
       try {
-        const response = await fetch('/api/projects?focus=housing', { cache: 'no-store' });
+        const response = await fetch(`${resolveApiPath('/api/projects')}?focus=housing`, { cache: 'no-store' });
         const data = (await response.json()) as { data?: HousingProject[] };
         if (!cancelled) setProjects(Array.isArray(data.data) ? data.data : []);
       } catch {

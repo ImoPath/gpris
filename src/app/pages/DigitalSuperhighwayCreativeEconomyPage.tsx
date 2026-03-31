@@ -70,6 +70,11 @@ const STATUS_COLORS: Record<CountyStatus, string> = {
   intervention: '#e11d48',
 };
 
+function resolveApiPath(path: string) {
+  const basePath = '/overview';
+  return path.startsWith(basePath) ? path : `${basePath}${path}`;
+}
+
 function formatNumber(value: number | undefined | null) {
   return new Intl.NumberFormat('en-KE').format(value ?? 0);
 }
@@ -166,9 +171,9 @@ export function DigitalSuperhighwayCreativeEconomyPage() {
       setProjectsLoading(true);
       try {
         const [projectsRes, wifiRes, hubsRes] = await Promise.all([
-          fetch('/api/projects?focus=digital', { cache: 'no-store' }),
-          fetch('/api/wifi', { cache: 'no-store' }),
-          fetch('/api/digital-hubs', { cache: 'no-store' }),
+          fetch(`${resolveApiPath('/api/projects')}?focus=digital`, { cache: 'no-store' }),
+          fetch(resolveApiPath('/api/wifi'), { cache: 'no-store' }),
+          fetch(resolveApiPath('/api/digital-hubs'), { cache: 'no-store' }),
         ]);
 
         if (!cancelled && projectsRes.ok) {

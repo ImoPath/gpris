@@ -57,6 +57,11 @@ type SectionGroup = {
   metrics: MetricCardRow[];
 };
 
+function resolveApiPath(path: string) {
+  const basePath = '/overview';
+  return path.startsWith(basePath) ? path : `${basePath}${path}`;
+}
+
 function normalizeTrend(direction: string | null | undefined): Trend {
   const value = (direction ?? '').toLowerCase();
   if (value.includes('up') || value.includes('positive')) return 'up';
@@ -115,8 +120,8 @@ export function MsmeEconomyPage() {
 
       try {
         const [metricsResponse, projectsResponse] = await Promise.all([
-          fetch('/api/metric-cards?pillar=MSME%20Economy', { cache: 'no-store' }),
-          fetch('/api/projects?focus=msme', { cache: 'no-store' }),
+          fetch(`${resolveApiPath('/api/metric-cards')}?pillar=MSME%20Economy`, { cache: 'no-store' }),
+          fetch(`${resolveApiPath('/api/projects')}?focus=msme`, { cache: 'no-store' }),
         ]);
 
         const metricsData = (await metricsResponse.json()) as MetricCardsResponse;

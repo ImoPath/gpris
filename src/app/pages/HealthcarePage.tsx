@@ -53,6 +53,11 @@ const STATUS_COLORS: Record<CountyStatus, string> = {
   intervention: '#e11d48',
 };
 
+function resolveApiPath(path: string) {
+  const basePath = '/overview';
+  return path.startsWith(basePath) ? path : `${basePath}${path}`;
+}
+
 function formatNumber(value: number | undefined) {
   return new Intl.NumberFormat('en-KE').format(value ?? 0);
 }
@@ -125,7 +130,7 @@ export function HealthcarePage() {
       setSummaryLoading(true);
       setSummaryError(null);
       try {
-        const response = await fetch('/api/healthcare/summary', { cache: 'no-store' });
+        const response = await fetch(resolveApiPath('/api/healthcare/summary'), { cache: 'no-store' });
         if (!response.ok) throw new Error(`Summary request failed (${response.status})`);
         const data = (await response.json()) as SummaryResponse;
         if (!cancelled) setSummary(data);
@@ -151,7 +156,9 @@ export function HealthcarePage() {
       setCountyError(null);
       try {
         const params = new URLSearchParams({ name: selectedCounty });
-        const response = await fetch(`/api/healthcare/county?${params.toString()}`, { cache: 'no-store' });
+        const response = await fetch(`${resolveApiPath('/api/healthcare/county')}?${params.toString()}`, {
+          cache: 'no-store',
+        });
         if (!response.ok) throw new Error(`County request failed (${response.status})`);
         const data = (await response.json()) as CountyResponse;
         if (!cancelled) setCountyData(data);

@@ -4,7 +4,7 @@ import { RootLayout } from "../src/app/layouts/RootLayout";
 import "../src/styles/index.css";
 
 export const metadata: Metadata = {
-  title: "Redesign Next.js Dashboard",
+  title: "Kenya National Projects Dashboard",
   description: "Kenya National Projects Dashboard",
 };
 
